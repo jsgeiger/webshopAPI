@@ -1,1 +1,1 @@
-from WebshopAPI import app
+from app import app
