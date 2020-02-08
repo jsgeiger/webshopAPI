@@ -73,5 +73,12 @@ def update_book(book_id):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+
+class Books(Resource):
+  def get(self):
+    return jsonify({'books': books})
+
+api.add_resource(Books, '/api/books')
+
 if __name__ == '__main__':
     app.run(host='localhost', port=5000)
