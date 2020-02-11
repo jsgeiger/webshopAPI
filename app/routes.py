@@ -1,6 +1,6 @@
 from app import app
-from flask import Flask, request, after_this_request, jsonify, abort, request, make_response
-from flask_restful import Resource, Api
+from flask import Flask, request, after_this_request, jsonify, request, make_response
+from flask_restful import Resource, Api, abort
 
 api = Api(app)
 
@@ -73,6 +73,12 @@ def update_book(book_id):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
+def abort_if_book_doesnt_exist(book_id):
+  for book in books:
+    if(book['id'] == book_id):
+      return book
+
+  abort(404, message="Book {} doesn't exist".format(book_id))
 
 class Books(Resource):
   def get(self):
