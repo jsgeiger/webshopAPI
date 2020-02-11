@@ -86,5 +86,11 @@ class Books(Resource):
 
 api.add_resource(Books, '/api/books')
 
+class Book(Resource):
+  def get(self, book_id):
+      return jsonify({'book': abort_if_book_doesnt_exist(book_id)})
+
+api.add_resource(Book, '/api/book/<int:book_id>')
+
 if __name__ == '__main__':
     app.run(host='localhost', port=5000)
