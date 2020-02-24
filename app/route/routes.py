@@ -1,6 +1,8 @@
-from app import app
+from app import app, db
 from flask import Flask, request, after_this_request, jsonify, request, make_response
-from flask_restful import Resource, Api, abort
+from flask_restful import Resource, Api, abort, reqparse
+from app.model.author import AuthorModel
+from app.model.book import Book
 
 api = Api(app)
 
@@ -38,7 +40,7 @@ def get_all_books():
   def add_header(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
-  
+
   return jsonify({'books': books})
   
 @app.route('/book/<int:book_id>', methods=['GET'])
@@ -54,9 +56,10 @@ def create_book():
     'id': len(books),
     'title': request.json['title'],
     'description': request.json['description'],
-    'author': request.json['author']
+    'author_id': Author.query.filter_by(name=request.json['author']).first()
   }
   books.append(book)
+
   return jsonify({'book': book}),201
 
 @app.route('/book/<int:book_id>', methods=['PUT'])
@@ -91,6 +94,32 @@ class Book(Resource):
       return jsonify({'book': abort_if_book_doesnt_exist(book_id)})
 
 api.add_resource(Book, '/api/book/<int:book_id>')
+
+Author_parser = reqparse.RequestParser()
+Author_parser.add_argument('forename')
+Author_parser.add_argument('surname')
+
+class Author(Resource):
+    def get(self, author_id):
+        return jsonify({'author': Author.query.filter_by(id=author_id).first()})
+        
+    def post(self):
+        data = Author_parser.parse_args()
+        new_author =  AuthorModel()
+        new_author.surname = data['surname']
+        new_author.forename = data['forename']
+
+        new_author.toString()
+
+
+        try:
+            return {
+                'message': 'User {} was created'.format(data['surname'])
+            }
+        except:
+            return {'message': 'Something went wrong'}, 500
+
+api.add_resource(Author, '/api/author')
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000)
