@@ -1,0 +1,29 @@
+version: '3'
+services:
+    app:
+        build: 
+            context: .
+        links:
+            - mysql
+        depends_on: 
+            - mysql
+        ports:
+            - "5000:5000"
+    mysql:
+        image: mariadb:10.1.38
+        command: --default-authentication-plugin=mysql_native_password
+        env_file:
+            - .env
+        volumes:
+            - database:/var/lib/mysql
+    
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        env_file:
+            - .env
+        depends_on:
+            - mysql
+
+volumes:
+    database:
+              
