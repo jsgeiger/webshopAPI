@@ -2,7 +2,7 @@ from app import app, db
 from flask import Flask, request, after_this_request, jsonify, request, make_response
 from flask_restful import Resource, Api, abort, reqparse
 from app.model.author import AuthorModel
-from app.model.book import Book
+from app.model.book import BookModel
 
 api = Api(app)
 
@@ -34,6 +34,7 @@ books = [
 def index():
   return "REST API for Webshop"
 
+"""
 @app.route("/books", methods=['GET'])
 def get_all_books():
   @after_this_request
@@ -82,17 +83,27 @@ def abort_if_book_doesnt_exist(book_id):
       return book
 
   abort(404, message="Book {} doesn't exist".format(book_id))
+"""
 
-class Books(Resource):
-  def get(self):
-    return jsonify({'books': books})
-
-api.add_resource(Books, '/api/books')
+Book_parser = reqparse.RequestParser()
+Book_parser.add_argument('title')
+Book_parser.add_argument('author')
+Book_parser.add_argument('description')
+Book_parser.add_argument('image')
 
 class Book(Resource):
   def get(self, book_id):
-      return jsonify({'book': abort_if_book_doesnt_exist(book_id)})
-
+    book = BookModel.query.filter_by(id=book_id).first()
+    author =  AuthorModel.query.filter_by(id=book.author_id).first().forename +  AuthorModel.query.filter_by(id=book.author_id).first().surname
+    return jsonify({'book': {
+      'title': book.title,
+      'author': author,
+      'description': book.description,
+      'image': book.image
+    }})
+  def post(self):
+    return {}
+   
 api.add_resource(Book, '/api/book/<int:book_id>')
 
 Author_parser = reqparse.RequestParser()
@@ -101,7 +112,6 @@ Author_parser.add_argument('surname')
 
 class Author(Resource):
     def get(self, author_id):
-        #return print(AuthorModel.query.filter_by(id=author_id).first())
         author = AuthorModel.query.filter_by(id=author_id).first()
         return {'author': {
           'forname': author.forename,
