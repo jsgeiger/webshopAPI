@@ -101,7 +101,12 @@ Author_parser.add_argument('surname')
 
 class Author(Resource):
     def get(self, author_id):
-        return jsonify({'author': Author.query.filter_by(id=author_id).first()})
+        #return print(AuthorModel.query.filter_by(id=author_id).first())
+        author = AuthorModel.query.filter_by(id=author_id).first()
+        return {'author': {
+          'forname': author.forename,
+          'surname': author.surname
+        }}
         
     def post(self):
         data = Author_parser.parse_args()
@@ -109,8 +114,7 @@ class Author(Resource):
         new_author.surname = data['surname']
         new_author.forename = data['forename']
 
-        new_author.toString()
-
+        new_author.save_to_db()
 
         try:
             return {
@@ -119,7 +123,7 @@ class Author(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-api.add_resource(Author, '/api/author')
+api.add_resource(Author, '/api/author/<int:author_id>')
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000)

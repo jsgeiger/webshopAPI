@@ -9,9 +9,5 @@ class AuthorModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def toString():
-        print("jaödfkjöa")
-
-
     def __repr__(self):
-        return '<Author %r>' % self.name
+        return '<Author %r>' % 'Author'
