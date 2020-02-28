@@ -15,4 +15,4 @@ from app.rescources import routes
 
 #db.create_all()
 
-app.run(host='0.0.0.0', port=4300, debug=True)
+app.run(host='0.0.0.0', debug=True)
