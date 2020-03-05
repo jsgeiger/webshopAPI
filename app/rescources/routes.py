@@ -133,7 +133,7 @@ class Author(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-api.add_resource(Author, '/api/author/<int:author_id>')
+api.add_resource(Author,  '/api/author/<int:author_id>', '/api/author')
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000)
