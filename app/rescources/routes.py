@@ -87,7 +87,7 @@ def abort_if_book_doesnt_exist(book_id):
 
 Book_parser = reqparse.RequestParser()
 Book_parser.add_argument('title')
-Book_parser.add_argument('author')
+Book_parser.add_argument('author_id')
 Book_parser.add_argument('description')
 Book_parser.add_argument('image')
 
@@ -102,9 +102,23 @@ class Book(Resource):
       'image': book.image
     }})
   def post(self):
-    return {}
-   
-api.add_resource(Book, '/api/book/<int:book_id>')
+    data = Book_parser.parse_args()
+    new_Book = BookModel()
+    new_Book.title = data['title']
+    new_Book.description = data['description']
+    new_Book.author_id = data['author_id']
+    new_Book.image = data['image']
+
+    #return data['image']
+    try:
+        new_Book.save_to_db()
+        return {
+            'message': 'Book {} was created'.format(data['title'])
+        }
+    except:
+        return {'message': 'Something went wrong'}, 500
+
+api.add_resource(Book, '/api/book/<int:book_id>', '/api/book')
 
 Author_parser = reqparse.RequestParser()
 Author_parser.add_argument('forename')
@@ -124,11 +138,10 @@ class Author(Resource):
         new_author.surname = data['surname']
         new_author.forename = data['forename']
 
-        new_author.save_to_db()
-
         try:
+            new_author.save_to_db()
             return {
-                'message': 'User {} was created'.format(data['surname'])
+                'message': 'Author {} was created'.format(data['surname'])
             }
         except:
             return {'message': 'Something went wrong'}, 500
