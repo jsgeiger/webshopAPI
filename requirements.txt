@@ -11,3 +11,4 @@ pytz==2019.3
 six==1.14.0
 sqlalchemy==1.3.13
 werkzeug==1.0.0
+Flask-Cors==3.0.8
