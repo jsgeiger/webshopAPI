@@ -1,8 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api
 import os
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+api = Api(app)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 
