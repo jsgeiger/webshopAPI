@@ -10,11 +10,12 @@ class Books(Resource):
         books = BookModel.query.all()
 
         def to_json(x):
+            author = AuthorModel.query.filter_by(id=x.author_id).first()
             return {
                 'id': x.id,
                 'title': x.title,
                 'description': x.description,
-                'author_id': x.author_id,
+                'author': author.forename + " " + author.surname,
                 'image': x.image,
             }
         return {'Books': list(map(lambda x: to_json(x), books))}
