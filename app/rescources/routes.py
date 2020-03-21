@@ -82,7 +82,7 @@ class Author(Resource):
     def get(self, author_id):
         author = AuthorModel.query.filter_by(id=author_id).first()
         return {'author': {
-            'forname': author.forename,
+            'forename': author.forename,
             'surname': author.surname
         }}
 
