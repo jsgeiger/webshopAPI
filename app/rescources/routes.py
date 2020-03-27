@@ -74,10 +74,25 @@ class Book(Resource):
 
 api.add_resource(Book, '/api/book/<int:book_id>', '/api/book')
 
+class Authors(Resource):
+    def get(self):
+        authors = AuthorModel.query.all()
+
+        def to_json(x):
+            return {
+                'id': x.id,
+                'title': x.forename,
+                'description': x.surname,
+            }
+
+        return {'Authors': list(map(lambda x: to_json(x), authors))}
+
+api.add_resource(Authors, '/api/authors')
+
+
 Author_parser = reqparse.RequestParser()
 Author_parser.add_argument('forename')
 Author_parser.add_argument('surname')
-
 
 class Author(Resource):
     def get(self, author_id):
