@@ -81,8 +81,8 @@ class Authors(Resource):
         def to_json(x):
             return {
                 'id': x.id,
-                'title': x.forename,
-                'description': x.surname,
+                'forename': x.forename,
+                'surname': x.surname,
             }
 
         return {'Authors': list(map(lambda x: to_json(x), authors))}
