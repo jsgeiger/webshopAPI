@@ -1,23 +1,28 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
-import os
 from flask_cors import CORS
-
+from flask_user import UserManager
 
 app = Flask(__name__)
-api = Api(app)
 CORS(app)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
 db = SQLAlchemy(app)
+api = Api(app)
+
+app.config.from_object('app.settings')
+app.config.from_object('app.env_settings')
 
 from app.rescources import routes
-from app.model import book, author
+from app.model import book, author, user
 
 db.create_all()
+
+user_manager = UserManager(app, db, user)
+
+
+@app.context_processor
+def context_processor():
+    return dict(user_manager=user_manager)
+
 
 app.run(host='0.0.0.0', port=4300, debug=True)
