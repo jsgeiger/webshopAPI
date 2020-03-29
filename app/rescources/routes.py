@@ -1,4 +1,4 @@
-from app import app, db, api
+from app import api
 from flask import Flask, request, after_this_request, jsonify, request, make_response
 from flask_restful import Resource, Api, abort, reqparse
 from app.model.author import AuthorModel
@@ -18,7 +18,9 @@ class Books(Resource):
                 'author': author.forename + " " + author.surname,
                 'image': x.image,
             }
+
         return {'Books': list(map(lambda x: to_json(x), books))}
+
 
 api.add_resource(Books, '/api/books')
 
@@ -74,6 +76,7 @@ class Book(Resource):
 
 api.add_resource(Book, '/api/book/<int:book_id>', '/api/book')
 
+
 class Authors(Resource):
     def get(self):
         authors = AuthorModel.query.all()
@@ -87,12 +90,13 @@ class Authors(Resource):
 
         return {'Authors': list(map(lambda x: to_json(x), authors))}
 
-api.add_resource(Authors, '/api/authors')
 
+api.add_resource(Authors, '/api/authors')
 
 Author_parser = reqparse.RequestParser()
 Author_parser.add_argument('forename')
 Author_parser.add_argument('surname')
+
 
 class Author(Resource):
     def get(self, author_id):
@@ -118,6 +122,3 @@ class Author(Resource):
 
 
 api.add_resource(Author, '/api/author/<int:author_id>', '/api/author')
-
-if __name__ == '__main__':
-    app.run(host='localhost', port=5000)
