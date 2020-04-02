@@ -1,8 +1,8 @@
 from app import api
 from flask import Flask, request, after_this_request, jsonify, request, make_response
 from flask_restful import Resource, Api, abort, reqparse
-from app.model.author import AuthorModel
-from app.model.book import BookModel
+from app.model.Author import AuthorModel
+from app.model.Book import BookModel
 
 
 class Books(Resource):

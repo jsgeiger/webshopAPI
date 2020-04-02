@@ -13,11 +13,11 @@ app.config.from_object('app.settings')
 app.config.from_object('app.env_settings')
 
 from app.rescources import routes
-from app.model import book, author, user
+from app.model import Book, Author, User
 
 db.create_all()
 
-user_manager = UserManager(app, db, user)
+user_manager = UserManager(app, db, User)
 
 
 @app.context_processor
