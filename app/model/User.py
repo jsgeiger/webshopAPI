@@ -10,6 +10,7 @@ class UserModel(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False, server_default='')
     forename = db.Column(db.String(100), nullable=False, server_default='')
     surname = db.Column(db.String(100), nullable=False, server_default='')
+    roles = db.relationship('Role', secondary='user_roles')
 
     def save_to_db(self):
         db.session.add(self)
