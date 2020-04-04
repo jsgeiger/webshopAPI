@@ -3,6 +3,7 @@ from flask import Flask, request, after_this_request, jsonify, request, make_res
 from flask_restful import Resource, Api, abort, reqparse
 from app.model.Author import AuthorModel
 from app.model.Book import BookModel
+from app.model.Role import Role
 
 
 class Books(Resource):
@@ -122,3 +123,39 @@ class Author(Resource):
 
 
 api.add_resource(Author, '/api/author/<int:author_id>', '/api/author')
+
+Role_parser = reqparse.RequestParser()
+Role_parser.add_argument('name')
+
+
+class UserRole(Resource):
+    def post(self):
+        data = Role_parser.parse_args()
+        new_role = Role(name=data['name'])
+
+        try:
+            new_role.save_to_db()
+            return {
+                'message': 'Role {} was created'.format(data['name'])
+            }
+        except:
+            return {'message': 'Something went wrong'}, 500
+
+
+api.add_resource(UserRole, '/api/role')
+
+
+class Roles(Resource):
+    def get(self):
+        roles = Role.query.all()
+
+        def to_json(x):
+            return {
+                'id': x.id,
+                'surname': x.name,
+            }
+
+        return {'Roles': list(map(lambda x: to_json(x), roles))}
+
+
+api.add_resource(Roles, '/api/roles')
