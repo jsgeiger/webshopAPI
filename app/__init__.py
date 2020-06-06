@@ -1,28 +1,30 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from flask_cors import CORS
 from flask_user import UserManager
-
-app = Flask(__name__)
-CORS(app)
-db = SQLAlchemy(app)
-api = Api(app)
-
-app.config.from_object('app.settings')
-app.config.from_object('app.env_settings')
-
-from app.rescources import routes
-from app.model import Book, Author, User, Role, UserRoles
-
-db.create_all()
-
-user_manager = UserManager(app, db, User)
+from app.model import User
+from app.views import create_routes
+import app.config
 
 
-@app.context_processor
-def context_processor():
-    return dict(user_manager=user_manager)
+# @app.context_processor
+# def context_processor():
+#   return dict(user_manager=user_manager)
 
 
-app.run(host='0.0.0.0', port=4300, debug=True)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(config.DevelopmentConfig)
+
+    from app.model import db
+    db.init_app(app)
+
+    from app.model import User, UserRoles, Author, Book, Role
+    with app.app_context():
+        db.create_all()
+
+    CORS(app)
+    api = Api(app)
+    create_routes(api)
+
+    return app

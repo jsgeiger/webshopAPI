@@ -1,11 +1,9 @@
-from app import db
-
 from flask_user import UserMixin
+from app.model import db
 
 
 class UserModel(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
     username = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False, server_default='')
     forename = db.Column(db.String(100), nullable=False, server_default='')
