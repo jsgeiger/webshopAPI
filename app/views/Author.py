@@ -10,8 +10,8 @@ class Authors(Resource):
         def to_json(author):
             return {
                 'id': author.id,
-                'forename': author.forename,
-                'surname': author.surname,
+                'first_name': author.first_name,
+                'last_name': author.last_name,
             }
 
         return jsonify({'Author': list(map(lambda x: to_json(x), authors))})
@@ -20,8 +20,8 @@ class Authors(Resource):
 class Author(Resource):
     def __init__(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('forename')
-        parser.add_argument('surname')
+        parser.add_argument('first_name')
+        parser.add_argument('last_name')
         self.parser = parser
 
     def abort_if_author_doesnt_exists(self, author_id):
@@ -36,22 +36,22 @@ class Author(Resource):
 
         return jsonify({'author': {
             'id': author.id,
-            'forename': author.forename,
-            'surname': author.surname
+            'first_name': author.first_name,
+            'last_name': author.last_name
         }})
 
     def post(self):
         data = self.parser.parse_args()
 
         new_author = AuthorModel(
-            forename=data['forename'],
-            surname=data['surname'],
+            first_name=data['first_name'],
+            last_name=data['last_name'],
         )
 
         try:
             new_author.save_to_db()
             return {
-                'message': 'Author {} was created'.format(data['surname'])
+                'message': 'Author {} was created'.format(data['last_name'])
             }
         except:
             return {'message': 'Author could not be saved'}, 500
@@ -59,13 +59,13 @@ class Author(Resource):
     def put(self, author_id):
         data = self.parser.parse_args()
         author = self.abort_if_author_doesnt_exists(author_id)
-        author.forename = data['forename']
-        author.surname = data['surname']
+        author.first_name = data['first_name']
+        author.last_name = data['last_name']
 
         try:
             author.save_to_db()
             return {
-                'message': 'Author {} {} was updated'.format(data['forename'], data['surname'])
+                'message': 'Author {} {} was updated'.format(data['first_name'], data['last_name'])
             }
         except:
             return {'message': 'Author could not be updated'}, 500

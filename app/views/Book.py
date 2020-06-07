@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_restful import Resource, Api, reqparse, abort
+from flask_restful import Resource, reqparse, abort
 from app.model.Book import BookModel
 from app.model.Author import AuthorModel
 
@@ -13,7 +13,7 @@ class Books(Resource):
             return {
                 'id': book.id,
                 'title': book.title,
-                'author': '%s %s' % (author.forename, author.surname),
+                'author': '%s %s' % (author.first_name, author.last_name),
                 'description': book.description,
                 'image': book.image,
             }
@@ -44,7 +44,7 @@ class Book(Resource):
         return jsonify({'book': {
             'id': book.id,
             'title': book.title,
-            'author': '%s %s' % (author.forename, author.surname),
+            'author': '%s %s' % (author.first_name, author.last_name),
             'description': book.description,
             'image': book.image
         }})

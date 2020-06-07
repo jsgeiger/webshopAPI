@@ -11,9 +11,8 @@ class Users(Resource):
             return {
                 'id': user.id,
                 'username': user.username,
-                'forename': user.forename,
-                'surname': user.surname,
-            #    'roles': user.roles,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
             }
 
         return jsonify({'Users': list(map(lambda x: to_json(x), users))})
@@ -23,10 +22,9 @@ class User(Resource):
     def __init__(self):
         parser = reqparse.RequestParser()
         parser.add_argument('username')
-        parser.add_argument('forename')
-        parser.add_argument('surname')
+        parser.add_argument('first_name')
+        parser.add_argument('last_name')
         parser.add_argument('password')
-        #  parser.add_argument('roles')
         self.parser = parser
 
     def abort_if_user_doesnt_exists(self, user_id):
@@ -42,18 +40,18 @@ class User(Resource):
         return jsonify({'User': {
             'id': user.id,
             'username': user.username,
-            'forename': user.forename,
-            'surname': user.surname,
-            #      'roles': user.roles
+            'first_name': user.first_name,
+            'last_name': user.last_name,
         }})
 
     def post(self):
         data = self.parser.parse_args()
         new_user = UserModel(
             username=data['username'],
-            forename=data['forename'],
-            surname=data['surname'],
+            first_name=data['first_name'],
+            last_name=data['last_name'],
         )
+
         new_user.set_password(data['password'])
 
         try:
@@ -69,8 +67,8 @@ class User(Resource):
         user = self.abort_if_user_doesnt_exists(user_id)
         user.set_password(data['password'])
         user.username = data['username']
-        user.forename = data['forename']
-        user.surname = data['surname']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
 
         try:
             user.save_to_db()
