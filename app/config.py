@@ -18,8 +18,4 @@ class DevelopmentConfig(Config):
 
     # Flask-SQLAlchemy settings
     SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 280}
-
-    # Flask-User settings
-    # USER_ENABLE_EMAIL = False  # Disable email authentication
-    # USER_ENABLE_USERNAME = True  # Enable username authentication
-    # USER_REQUIRE_RETYPE_PASSWORD = False  # Simplify register form
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
