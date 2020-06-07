@@ -2,6 +2,8 @@ from app.model import db
 
 
 class BookModel(db.Model):
+    __tablename__ = 'book_model'
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)

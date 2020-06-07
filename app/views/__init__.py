@@ -9,9 +9,7 @@ def create_routes(api):
     api.add_resource(Book, '/api/book/<int:book_id>', '/api/book')
     api.add_resource(Authors, '/api/authors')
     api.add_resource(Author, '/api/author/<int:author_id>', '/api/author')
-    api.add_resource(UserRole, '/api/role')
-    api.add_resource(Roles, '/api/roles')
+    # api.add_resource(UserRole, '/api/role')
+    # api.add_resource(Roles, '/api/roles')
     api.add_resource(Users, '/api/users')
     api.add_resource(User, '/api/user', '/api/user/<int:user_id>')
-
-

@@ -2,6 +2,8 @@ from app.model import db
 
 
 class AuthorModel(db.Model):
+    __tablename__ = 'author_model'
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     forename = db.Column(db.String(255), nullable=False)
     surname = db.Column(db.String(255), nullable=False)
@@ -11,4 +13,4 @@ class AuthorModel(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<Author %r>' % 'Author'
+        return '<Author %r>' % self.surname

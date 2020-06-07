@@ -27,4 +27,6 @@ def create_app():
     api = Api(app)
     create_routes(api)
 
+    # user_manager = UserManager(app, db, User.UserModel)
+
     return app
