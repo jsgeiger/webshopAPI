@@ -1,10 +1,9 @@
 FROM python:3.7
 
-COPY . .
-
 WORKDIR /
-ADD requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+COPY ./requirements.txt /requirements.txt
+COPY ./run.py /run.py
+RUN pip install -r /requirements.txt
 RUN pip install mysqlclient
 RUN pip install python-dotenv
 RUN pip install email_validator

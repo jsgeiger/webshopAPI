@@ -3,6 +3,8 @@ services:
   app:
     build:
       context: .
+    volumes:
+    - ./app:/app:rw
     links:
       - mysql
     depends_on:
