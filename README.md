@@ -13,6 +13,9 @@ To run this project:
 5. set environment variables in .env
 6. docker-compose build
 7. docker-compose up -d
+8. create WebshopAPI database with phpmyadmin
+9. docker-compose up -d
+
 ```
 
 ## Technologies
