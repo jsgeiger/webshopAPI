@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
-from app.model import Role
+from app.model.Role import Role
 
 
 class UserRole(Resource):
@@ -8,6 +8,14 @@ class UserRole(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('name')
         self.parser = parser
+
+    def get(self, role_id):
+        role = Role.query.filter_by(id=role_id).first()
+
+        return jsonify({'User': {
+            'id': role.id,
+            'name': role.name
+        }})
 
     def post(self):
         data = self.parser.parse_args()
