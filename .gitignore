@@ -1,5 +1,7 @@
 /__pycache__/
 /app/__pycache__/
+/app/views/__pycache__/
+/app/model/__pycache__/
 .vscode/
 .idea/
 .env
