@@ -1,14 +1,24 @@
 from flask_user import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from app.model import db
 
 
 class UserModel(db.Model, UserMixin):
+    __tablename__ = 'user_model'
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False, server_default='')
     forename = db.Column(db.String(100), nullable=False, server_default='')
     surname = db.Column(db.String(100), nullable=False, server_default='')
-    roles = db.relationship('Role', secondary='user_roles')
+
+    #  roles = db.relationship('Role', secondary='user_roles')
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password, method='sha256')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def save_to_db(self):
         db.session.add(self)
